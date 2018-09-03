@@ -21,7 +21,7 @@ type Tileset struct {
 	// TileHeight is the (maximum) height of the tiles in the tileset
 	TileHeight int `xml:"tileheight,attr"`
 	// Spacing is the spacing of the tiles in pixels between the tiles in the tileset
-	Spacing float64 `xml:"spacing,attr"`
+	Spacing int `xml:"spacing,attr"`
 	// Margin is the margin around the tiles in pixels of the tiles in the tileset
 	Margin float64 `xml:"margin,attr"`
 	// TileCount is the number of tiles in the tileset
@@ -99,7 +99,7 @@ type Terrain struct {
 // Tile is a single tile in a tile set
 type Tile struct {
 	// ID is the local tile id within its tileset
-	ID int `xml:"id,attr"`
+	ID uint32 `xml:"id,attr"`
 	// Type is the type of the tile
 	Type string `xml:"type,attr"`
 	// Terrain defines the terrain type of each corner of the tile, given as
