@@ -1,6 +1,11 @@
 package tmx
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"io/ioutil"
+	"os"
+	"path"
+)
 
 // ObjectGroup is a group of objects
 type ObjectGroup struct {
@@ -187,6 +192,70 @@ func (o *Object) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		return err
 	}
 	*o = (Object)(obj)
+	if o.Template != "" {
+		o2 := Object{}
+		f, err := os.Open(path.Join(path.Dir(TMXURL), o.Template))
+		defer f.Close()
+		if err != nil {
+			return err
+		}
+		b, err := ioutil.ReadAll(f)
+		if err != nil {
+			return err
+		}
+		err = xml.Unmarshal(b, &o2)
+		if err != nil {
+			return err
+		}
+		if len(o.Ellipses) == 0 {
+			o.Ellipses = o2.Ellipses
+		}
+		if o.GID == 0 {
+			o.GID = o2.GID
+		}
+		if o.Height == 0 {
+			o.Height = o2.Height
+		}
+		if o.ID == 0 {
+			o.ID = o2.ID
+		}
+		if len(o.Images) == 0 {
+			o.Images = o2.Images
+		}
+		if o.Name == "" {
+			o.Name = o2.Name
+		}
+		if len(o.Polygons) == 0 {
+			o.Polygons = o2.Polygons
+		}
+		if len(o.Polylines) == 0 {
+			o.Polylines = o2.Polylines
+		}
+		if len(o.Properties) == 0 {
+			o.Properties = o2.Properties
+		}
+		if o.Rotation == 0 {
+			o.Rotation = o2.Rotation
+		}
+		if len(o.Text) == 0 {
+			o.Text = o2.Text
+		}
+		if o.Type == "" {
+			o.Type = o2.Type
+		}
+		if o.Visible == 1 {
+			o.Visible = o2.Visible
+		}
+		if o.Width == 0 {
+			o.Width = o2.Width
+		}
+		if o.X == 0 {
+			o.X = o2.X
+		}
+		if o.Y == 0 {
+			o.Y = o2.Y
+		}
+	}
 	return nil
 }
 

@@ -6,10 +6,10 @@ import "encoding/xml"
 type Layer struct {
 	// Name is the name of the layer
 	Name string `xml:"name,attr"`
-	// X is the x coordinate of the layer in tiles
-	X int `xml:"x,attr"`
-	// Y is the y coordinate of the layer in tiles
-	Y int `xml:"y,attr"`
+	// X is the x coordinate of the layer
+	X float64 `xml:"x,attr"`
+	// Y is the y coordinate of the layer
+	Y float64 `xml:"y,attr"`
 	// Width is the width of the layer in tiles. Always the same as the map
 	// width for fixed-size maps.
 	Width int `xml:"width,attr"`
@@ -17,7 +17,7 @@ type Layer struct {
 	// height for fixed-size maps.
 	Height int `xml:"height,attr"`
 	// Opacity is the opacity of the layer as a value from 0 to 1. Defaults to 1.
-	Opacity int `xml:"opacity,attr"`
+	Opacity float64 `xml:"opacity,attr"`
 	// Visible is whether the layer is shown(1) or hidden(0). Defaults to 1.
 	Visible int `xml:"visible,attr"`
 	// OffsetX is the rendering offset for this layer in pixels.
