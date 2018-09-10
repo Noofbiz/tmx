@@ -55,7 +55,7 @@ type Object struct {
 	// Rotation is the rotation of the object in degrees
 	Rotation float64 `xml:"rotation,attr"`
 	// GID is a reference to the tile
-	GID int `xml:"gid,attr"`
+	GID uint32 `xml:"gid,attr"`
 	// Visible is whether the object is shown (1) or hidden (0)
 	Visible int `xml:"visible,attr"`
 	// Template is a reference to a template file
