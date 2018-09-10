@@ -119,6 +119,8 @@ type Text struct {
 	// Valign is the vertical allignment of the text within the object (top,
 	// center or bottom)
 	Valign string `xml:"valign,attr"`
+	// CharData is the character data of the text element
+	CharData string `xml:",chardata"`
 }
 
 // ImageLayer is a tile layer that contains a reference to an image
