@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="3" height="3" tilewidth="16" tileheight="16" infinite="0" nextobjectid="1">
+ <tileset firstgid="1" name="roguelikeIndoor_transparent" tilewidth="16" tileheight="16" spacing="1" tilecount="468" columns="26">
+  <image source="roguelikeIndoor_transparent.png" width="457" height="305"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="3" height="3">
+  <data encoding="base64" compression="zlib">
+   eJx7zcDA8AaI3wLxdyBOYWRgkAJiZyB2AWJBIAYAfvME1w==
+  </data>
+ </layer>
+</map>

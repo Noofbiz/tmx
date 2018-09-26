@@ -144,10 +144,7 @@ func (t *Tileset) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		if err != nil {
 			return err
 		}
-		b, err := ioutil.ReadAll(f)
-		if err != nil {
-			return err
-		}
+		b, _ := ioutil.ReadAll(f)
 		err = xml.Unmarshal(b, &t2)
 		if err != nil {
 			return err

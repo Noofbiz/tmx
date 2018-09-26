@@ -86,28 +86,27 @@ func (da *Data) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		// needed to allow TilEd-style CSVs with line-ending commas but no comma at the end
 		// of last line.
 		cr.FieldsPerRecord = -1
-		if recs, err := cr.ReadAll(); err == nil {
-			if len(recs) < 1 {
-				return errors.New("No csv records found")
-			}
-			for _, rec := range recs {
-				for i, id := range rec {
-					// An empty string appearing after last comma. We filter it.
-					if id == "" && i == len(rec)-1 {
-						continue
-					}
-					if nextInt, err2 := strconv.ParseUint(id, 10, 32); err == nil {
-						da.Tiles = append(da.Tiles, TileData{GID: uint32(nextInt)})
-					} else {
-						return err2
-					}
+		recs, _ := cr.ReadAll()
+		if len(recs) < 1 {
+			return errors.New("No csv records found")
+		}
+		for _, rec := range recs {
+			for i, id := range rec {
+				// An empty string appearing after last comma. We filter it.
+				if id == "" && i == len(rec)-1 {
+					continue
 				}
+				nextInt, err := strconv.ParseUint(id, 10, 32)
+				if err != nil {
+					return err
+				}
+				g, f := decodeGID(uint32(nextInt))
+				da.Tiles = append(da.Tiles, TileData{
+					RawGID:   uint32(nextInt),
+					Flipping: f,
+					GID:      g,
+				})
 			}
-			if len(da.Tiles) < 1 {
-				return errors.New("No Data Returned")
-			}
-		} else {
-			return err
 		}
 		return nil
 	}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="16" tileheight="16" infinite="0" nextobjectid="1">
+ <tileset firstgid="469" source="doesNotExist.tsx"/>
+</map>
