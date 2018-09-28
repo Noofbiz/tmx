@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="3" height="3" tilewidth="16" tileheight="16" infinite="0" nextobjectid="3">
+ <layer name="Tile Layer 1" width="3" height="3">
+  <data encoding="base64" compression="zlib">
+   eJxjYCAMAAAkAAE=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="1" x="-27.2734" y="13.7031" width="89.5469" height="18.8438">
+   <text wrap="1">Hello World</text>
+  </object>
+ </objectgroup>
+</map>

@@ -195,67 +195,61 @@ func (o *Object) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	}
 	*o = (Object)(obj)
 	if o.Template != "" {
-		o2 := Object{}
+		tmpl := Template{}
 		f, err := os.Open(path.Join(path.Dir(TMXURL), o.Template))
 		defer f.Close()
 		if err != nil {
 			return err
 		}
-		b, err := ioutil.ReadAll(f)
-		if err != nil {
-			return err
-		}
-		err = xml.Unmarshal(b, &o2)
+		b, _ := ioutil.ReadAll(f)
+		err = xml.Unmarshal(b, &tmpl)
 		if err != nil {
 			return err
 		}
 		if len(o.Ellipses) == 0 {
-			o.Ellipses = o2.Ellipses
+			o.Ellipses = tmpl.Objects[0].Ellipses
 		}
 		if o.GID == 0 {
-			o.GID = o2.GID
+			o.GID = tmpl.Objects[0].GID
 		}
 		if o.Height == 0 {
-			o.Height = o2.Height
-		}
-		if o.ID == 0 {
-			o.ID = o2.ID
+			o.Height = tmpl.Objects[0].Height
 		}
 		if len(o.Images) == 0 {
-			o.Images = o2.Images
+			o.Images = tmpl.Objects[0].Images
 		}
 		if o.Name == "" {
-			o.Name = o2.Name
+			o.Name = tmpl.Objects[0].Name
 		}
 		if len(o.Polygons) == 0 {
-			o.Polygons = o2.Polygons
+			o.Polygons = tmpl.Objects[0].Polygons
 		}
 		if len(o.Polylines) == 0 {
-			o.Polylines = o2.Polylines
+			o.Polylines = tmpl.Objects[0].Polylines
 		}
 		if len(o.Properties) == 0 {
-			o.Properties = o2.Properties
+			o.Properties = tmpl.Objects[0].Properties
 		}
 		if o.Rotation == 0 {
-			o.Rotation = o2.Rotation
+			o.Rotation = tmpl.Objects[0].Rotation
 		}
 		if len(o.Text) == 0 {
-			o.Text = o2.Text
+			o.Text = tmpl.Objects[0].Text
 		}
 		if o.Type == "" {
-			o.Type = o2.Type
+			o.Type = tmpl.Objects[0].Type
 		}
 		if o.Visible == 1 {
-			o.Visible = o2.Visible
+			o.Visible = tmpl.Objects[0].Visible
 		}
 		if o.Width == 0 {
-			o.Width = o2.Width
+			o.Width = tmpl.Objects[0].Width
 		}
 		if o.X == 0 {
-			o.X = o2.X
+			o.X = tmpl.Objects[0].X
 		}
 		if o.Y == 0 {
-			o.Y = o2.Y
+			o.Y = tmpl.Objects[0].Y
 		}
 	}
 	return nil

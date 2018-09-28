@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="3" height="3" tilewidth="16" tileheight="16" infinite="0" nextobjectid="8">
+ <tileset firstgid="1" name="roguelikeHoliday_transparent" tilewidth="16" tileheight="16" spacing="1" tilecount="48" columns="12">
+  <image source="roguelikeHoliday_transparent.png" width="203" height="67"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="3" height="3">
+  <data encoding="base64" compression="zlib">
+   eJxTZWBgUAdiNSRaFYkGYQAa1AFV
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="1" name="Rectangle" x="10" y="13" width="25" height="23"/>
+  <object id="3" template="Wheel.tx" x="26" y="5"/>
+  <object id="7" template="Wheel.tx" name="Wheel2" x="0" y="0"/>
+ </objectgroup>
+ <group name="Group 1" offsetx="2" offsety="2">
+  <objectgroup name="Object Layer 2"/>
+  <imagelayer name="Image Layer 1" offsetx="5" offsety="5">
+ </group>
+</map>
