@@ -269,3 +269,39 @@ func TestDataFlipped(t *testing.T) {
 		}
 	}
 }
+
+func TestDataChunks(t *testing.T) {
+	TMXURL = "testData/chunkData.tmx"
+	f, err := os.Open(TMXURL)
+	if err != nil {
+		t.Errorf("Unable to open %v. Error was: %v", TMXURL, err)
+		return
+	}
+	defer f.Close()
+	m, err := Parse(f)
+	if err != nil {
+		t.Error("Unable to parse chunk data")
+		return
+	}
+	for i, e := range testDataExpected {
+		if m.Layers[0].Data[0].Chunks[0].Tiles[i].GID != e {
+			t.Errorf("Test data did not match expected data\nWanted: %v\nGot: %v", e, m.Layers[0].Data[0].Chunks[0].Tiles[i].GID)
+			return
+		}
+	}
+}
+
+func TestDataMalformedChunks(t *testing.T) {
+	TMXURL = "testData/malformedChunkData.tmx"
+	f, err := os.Open(TMXURL)
+	if err != nil {
+		t.Errorf("Unable to open %v. Error was: %v", TMXURL, err)
+		return
+	}
+	defer f.Close()
+	_, err = Parse(f)
+	if err == nil {
+		t.Error("Able to parse malformed chunk data")
+		return
+	}
+}

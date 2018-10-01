@@ -44,6 +44,8 @@ type Chunk struct {
 	Height int `xml:"height,attr"`
 	// Tiles are the tiles in the chunk
 	Tiles []TileData `xml:"tile"`
+	// Inner is the inner data
+	Inner string `xml:",innerxml"`
 }
 
 // TileData contains the gid that maps a tile to the sprite
@@ -78,84 +80,19 @@ func (da *Data) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	if len(da.Tiles) > 0 {
 		return nil
 	}
-	if da.Encoding == "csv" {
-		b := strings.NewReader(strings.TrimSpace(da.Inner))
-		cr := csv.NewReader(b)
-		// We allow variable number of fields per record to allow line ending commas and then
-		// empty strings appearing as a field. Later, we filter empty strings. This trick is
-		// needed to allow TilEd-style CSVs with line-ending commas but no comma at the end
-		// of last line.
-		cr.FieldsPerRecord = -1
-		recs, _ := cr.ReadAll()
-		if len(recs) < 1 {
-			return errors.New("No csv records found")
+	var err error
+	if len(da.Chunks) == 0 {
+		da.Tiles, err = decodeTileData(da.Inner, da.Encoding, da.Compression)
+		if err != nil {
+			return err
 		}
-		for _, rec := range recs {
-			for i, id := range rec {
-				// An empty string appearing after last comma. We filter it.
-				if id == "" && i == len(rec)-1 {
-					continue
-				}
-				nextInt, err := strconv.ParseUint(id, 10, 32)
-				if err != nil {
-					return err
-				}
-				g, f := decodeGID(uint32(nextInt))
-				da.Tiles = append(da.Tiles, TileData{
-					RawGID:   uint32(nextInt),
-					Flipping: f,
-					GID:      g,
-				})
+	} else {
+		for i := range da.Chunks {
+			da.Chunks[i].Tiles, err = decodeTileData(da.Chunks[i].Inner, da.Encoding, da.Compression)
+			if err != nil {
+				return err
 			}
 		}
-		return nil
-	}
-	var breader io.Reader
-	if da.Encoding == "base64" {
-		buff, err := base64.StdEncoding.DecodeString(strings.TrimSpace(da.Inner))
-		if err != nil {
-			return err
-		}
-		breader = bytes.NewReader(buff)
-	} else {
-		return errors.New("Unknown Encoding")
-	}
-	// Setup decompression if needed
-	var zreader io.Reader
-	if da.Compression == "" {
-		zreader = breader
-	} else if da.Compression == "zlib" {
-		z, err := zlib.NewReader(breader)
-		if err != nil {
-			return err
-		}
-		defer z.Close()
-		zreader = z
-	} else if da.Compression == "gzip" {
-		z, err := gzip.NewReader(breader)
-		if err != nil {
-			return err
-		}
-		defer z.Close()
-		zreader = z
-	} else {
-		return errors.New("Unknown Compression")
-	}
-	var nextInt uint32
-	for {
-		err := binary.Read(zreader, binary.LittleEndian, &nextInt)
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			return err
-		}
-		g, f := decodeGID(nextInt)
-		da.Tiles = append(da.Tiles, TileData{
-			RawGID:   nextInt,
-			GID:      g,
-			Flipping: f,
-		})
 	}
 	return nil
 }
@@ -166,4 +103,88 @@ func decodeGID(u uint32) (uint32, uint32) {
 	d := u & DiagonalFlipFlag
 	ret := u & ^(HorizontalFlipFlag | VerticalFlipFlag | DiagonalFlipFlag)
 	return ret, h | v | d
+}
+
+func decodeTileData(d, encoding, compression string) ([]TileData, error) {
+	tiles := make([]TileData, 0)
+	if encoding == "csv" {
+		b := strings.NewReader(strings.TrimSpace(d))
+		cr := csv.NewReader(b)
+		// We allow variable number of fields per record to allow line ending commas and then
+		// empty strings appearing as a field. Later, we filter empty strings. This trick is
+		// needed to allow TilEd-style CSVs with line-ending commas but no comma at the end
+		// of last line.
+		cr.FieldsPerRecord = -1
+		recs, _ := cr.ReadAll()
+		if len(recs) < 1 {
+			return tiles, errors.New("No csv records found")
+		}
+		for _, rec := range recs {
+			for i, id := range rec {
+				// An empty string appearing after last comma. We filter it.
+				if id == "" && i == len(rec)-1 {
+					continue
+				}
+				nextInt, err := strconv.ParseUint(id, 10, 32)
+				if err != nil {
+					return tiles, err
+				}
+				g, f := decodeGID(uint32(nextInt))
+				tiles = append(tiles, TileData{
+					RawGID:   uint32(nextInt),
+					Flipping: f,
+					GID:      g,
+				})
+			}
+		}
+		return tiles, nil
+	}
+	var breader io.Reader
+	if encoding == "base64" {
+		buff, err := base64.StdEncoding.DecodeString(strings.TrimSpace(d))
+		if err != nil {
+			return tiles, err
+		}
+		breader = bytes.NewReader(buff)
+	} else {
+		return tiles, errors.New("Unknown Encoding")
+	}
+	// Setup decompression if needed
+	var zreader io.Reader
+	if compression == "" {
+		zreader = breader
+	} else if compression == "zlib" {
+		z, err := zlib.NewReader(breader)
+		if err != nil {
+			return tiles, err
+		}
+		defer z.Close()
+		zreader = z
+	} else if compression == "gzip" {
+		z, err := gzip.NewReader(breader)
+		if err != nil {
+			return tiles, err
+		}
+		defer z.Close()
+		zreader = z
+	} else {
+		return tiles, errors.New("Unknown Compression")
+	}
+	var nextInt uint32
+	for {
+		err := binary.Read(zreader, binary.LittleEndian, &nextInt)
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			return tiles, err
+		}
+		g, f := decodeGID(nextInt)
+		tiles = append(tiles, TileData{
+			RawGID:   nextInt,
+			GID:      g,
+			Flipping: f,
+		})
+	}
+	return tiles, nil
 }
