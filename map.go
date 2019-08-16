@@ -4,10 +4,12 @@ import "encoding/xml"
 
 // Map is the root element of a TMX map
 type Map struct {
+	// Indicate to encoding/xml that the <map> tag should be lowercase.
+	XMLName string `xml:"map"`
 	// Version is the TMX format version
-	Version string `xml:"version,attr"`
+	Version string `xml:"version,attr,omitempty"`
 	// TiledVersion is the Version of Tiled Map Editor used to generate the TMX
-	TiledVersion string `xml:"tiledversion,attr"`
+	TiledVersion string `xml:"tiledversion,attr,omitempty"`
 	// Orientation is the orientation of the map. Tiled supports “orthogonal”,
 	// “isometric”, “staggered” and “hexagonal”
 	Orientation string `xml:"orientation,attr"`
@@ -15,7 +17,7 @@ type Map struct {
 	// Valid values are right-down (the default), right-up, left-down and left-up.
 	// In all cases, the map is drawn row-by-row.
 	// (only supported for orthogonal maps at the moment)
-	RenderOrder string `xml:"renderorder,attr"`
+	RenderOrder string `xml:"renderorder,attr,omitempty"`
 	// Width is the map width in tiles
 	Width int `xml:"width,attr"`
 	// Height is the map height in tiles
@@ -26,19 +28,19 @@ type Map struct {
 	TileHeight int `xml:"tileheight,attr"`
 	// HexSideLength determines the width or height (depending on the staggered
 	// axis) of the tile’s edge, in pixels. Only for hexagonal maps.
-	HexSideLength int `xml:"hexsidelength,attr"`
+	HexSideLength int `xml:"hexsidelength,attr,omitempty"`
 	// StaggerAxis is for staggered and hexagonal maps, determines which axis
 	// (“x” or “y”) is staggered.
-	StaggerAxis string `xml:"staggeraxis,attr"`
+	StaggerAxis string `xml:"staggeraxis,attr,omitempty"`
 	// StaggerIndex is for staggered and hexagonal maps, determines whether the
 	// “even” or “odd” indexes along the staggered axis are shifted.
-	StaggerIndex string `xml:"staggerindex,attr"`
+	StaggerIndex string `xml:"staggerindex,attr,omitempty"`
 	// BackgroundColor is the background color of the map. Is of the form #AARRGGBB
-	BackgroundColor string `xml:"backgroundcolor,attr"`
+	BackgroundColor string `xml:"backgroundcolor,attr,omitempty"`
 	// NextObjectID stores the next object id available for new objects.
-	NextObjectID int `xml:"nextobjectid,attr"`
+	NextObjectID int `xml:"nextobjectid,attr,omitempty"`
 	// Properties are the properties of the map
-	Properties []Property `xml:"properties>property"`
+	Properties []Property `xml:"properties,omitempty>property"`
 	// Tilesets are the tilesets of the map
 	Tilesets []Tileset `xml:"tileset"`
 	// Layers are the layers of the map
