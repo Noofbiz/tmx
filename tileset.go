@@ -13,7 +13,7 @@ type Tileset struct {
 	// to the first tile in this tileset)
 	FirstGID uint32 `xml:"firstgid,attr"`
 	// Source is the location of the external tilemap TSX file, if any
-	Source string `xml:"source,attr"`
+	Source string `xml:"source,attr,omitempty"`
 	// Name is the name of the tileset
 	Name string `xml:"name,attr"`
 	// TileWidth is the (maximum) width of tiles in the tileset
@@ -21,13 +21,13 @@ type Tileset struct {
 	// TileHeight is the (maximum) height of the tiles in the tileset
 	TileHeight int `xml:"tileheight,attr"`
 	// Spacing is the spacing of the tiles in pixels between the tiles in the tileset
-	Spacing int `xml:"spacing,attr"`
+	Spacing int `xml:"spacing,attr,omitempty"`
 	// Margin is the margin around the tiles in pixels of the tiles in the tileset
-	Margin float64 `xml:"margin,attr"`
+	Margin float64 `xml:"margin,attr,omitempty"`
 	// TileCount is the number of tiles in the tileset
-	TileCount int `xml:"tilecount,attr"`
+	TileCount int `xml:"tilecount,attr,omitempty"`
 	// Columns is the number of tile columns in the tileset
-	Columns int `xml:"columns,attr"`
+	Columns int `xml:"columns,attr,omitempty"`
 	// TileOffset is used to specify an offset in pixels, to be applied when
 	// drawing a tile from the related tileset. When not present, no offset
 	// is applied
@@ -36,15 +36,15 @@ type Tileset struct {
 	// tile overlays for terrain and collision information are rendered
 	Grid []Grid `xml:"grid"`
 	// Properties are the custom properties of the tileset
-	Properties []Property `xml:"properties>property"`
+	Properties []Property `xml:"properties,omitempty>property"`
 	// Image is the image associated with the tileset
 	Image []Image `xml:"image"`
 	// TerrainTypes are the terraintypes associated with the tileset
-	TerrainTypes []Terrain `xml:"terraintypes>terrain"`
+	TerrainTypes []Terrain `xml:"terraintypes,omitempty>terrain"`
 	// Tiles are tiles in the tileset
 	Tiles []Tile `xml:"tile"`
 	// WangSets contain the list of wang sets defined for this tileset
-	WangSets []WangSet `xml:"wangsets>wangset"`
+	WangSets []WangSet `xml:"wangsets,omitempty>wangset"`
 }
 
 // TileOffset is used to specify an offset in pixels, to be applied when
@@ -73,13 +73,13 @@ type Grid struct {
 type Image struct {
 	// Format is used for embedded images, in combination with a data child element.
 	// Valid values are file extensions like png, gif, jpg, bmp, etc.
-	Format string `xml:"format,attr"`
+	Format string `xml:"format,attr,omitempty"`
 	// Source is the reference to the tileset image file.
 	Source string `xml:"source,attr"`
 	// Transparent defines a specific color that is treated as transparent (example
 	// value: “#FF00FF” for magenta). Up until Tiled 0.12, this value is written
 	// out without a # but this is planned to change.
-	Transparent string `xml:"trans,attr"`
+	Transparent string `xml:"trans,attr,omitempty"`
 	// Width is the image width in pixels
 	Width float64 `xml:"width,attr"`
 	// Height is the image height in pixels

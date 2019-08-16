@@ -7,9 +7,9 @@ type Layer struct {
 	// Name is the name of the layer
 	Name string `xml:"name,attr"`
 	// X is the x coordinate of the layer
-	X float64 `xml:"x,attr"`
+	X float64 `xml:"x,attr,omitempty"`
 	// Y is the y coordinate of the layer
-	Y float64 `xml:"y,attr"`
+	Y float64 `xml:"y,attr,omitempty"`
 	// Width is the width of the layer in tiles. Always the same as the map
 	// width for fixed-size maps.
 	Width int `xml:"width,attr"`
@@ -21,11 +21,11 @@ type Layer struct {
 	// Visible is whether the layer is shown(1) or hidden(0). Defaults to 1.
 	Visible int `xml:"visible,attr"`
 	// OffsetX is the rendering offset for this layer in pixels.
-	OffsetX float64 `xml:"offsetx,attr"`
+	OffsetX float64 `xml:"offsetx,attr,omitempty"`
 	// OffsetY is the rendering offset for this layer in pixels.
-	OffsetY float64 `xml:"offsety,attr"`
+	OffsetY float64 `xml:"offsety,attr,omitempty"`
 	// Properties are the properties of the layer
-	Properties []Property `xml:"properties>property"`
+	Properties []Property `xml:"properties,omitempty>property"`
 	// Data is any data for the layer
 	Data []Data `xml:"data"`
 }

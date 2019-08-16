@@ -21,7 +21,7 @@ type Data struct {
 	Encoding string `xml:"encoding,attr"`
 	// Compression is the compression used for the data. It can either be
 	// "gzip" or "zlib"
-	Compression string `xml:"compression,attr"`
+	Compression string `xml:"compression,attr,omitempty"`
 	// Tiles are the tiles in the data. Not the same as TMXTiles from the Tileset.
 	Tiles []TileData `xml:"tile"`
 	// Chunks are sets of tiles over an area. Used for randomly generated maps.
