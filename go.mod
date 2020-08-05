@@ -1,1 +1,3 @@
-module github.com/Noofbiz/tmx
+module github.com/kori-irrlicht/tmx
+
+go 1.14

@@ -139,12 +139,10 @@ func (t *Tileset) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	*t = (Tileset)(ts)
 	if t.Source != "" {
 		t2 := Tileset{}
-		f, err := os.Open(path.Join(path.Dir(TMXURL), t.Source))
-		defer f.Close()
+		b, err := obtainTileset(path.Join(path.Dir(TMXURL), t.Source))
 		if err != nil {
 			return err
 		}
-		b, _ := ioutil.ReadAll(f)
 		err = xml.Unmarshal(b, &t2)
 		if err != nil {
 			return err
@@ -166,3 +164,20 @@ func (t *Tileset) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	}
 	return nil
 }
+
+// obtainTileset tries to return a preloaded tileset, otherwise it tries to load the file from the file system
+func obtainTileset(path string) ([]byte, error) {
+	if pre, ok := PreloadedTilesets[path]; ok {
+		return pre, nil
+	}
+
+	f, err := os.Open(path)
+	defer f.Close()
+	if err != nil {
+		return nil, err
+	}
+	return ioutil.ReadAll(f)
+
+}
+
+var PreloadedTilesets = make(map[string][]byte)
