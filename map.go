@@ -40,7 +40,7 @@ type Map struct {
 	// NextObjectID stores the next object id available for new objects.
 	NextObjectID int `xml:"nextobjectid,attr,omitempty"`
 	// Properties are the properties of the map
-	Properties []Property `xml:"properties,omitempty>property"`
+	Properties []Property `xml:"properties>property,omitempty"`
 	// Tilesets are the tilesets of the map
 	Tilesets []Tileset `xml:"tileset"`
 	// Layers are the layers of the map
