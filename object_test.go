@@ -207,3 +207,34 @@ func TestTextMalformed(t *testing.T) {
 		return
 	}
 }
+
+func TestPropertyParsed(t *testing.T) {
+	TMXURL = "testData/properties.tmx"
+	f, err := os.Open(TMXURL)
+	if err != nil {
+		t.Errorf("Unable to open %v. Error was: %v", TMXURL, err)
+		return
+	}
+	defer f.Close()
+	m, err := Parse(f)
+	if err != nil {
+		t.Error("Unable to parse object data")
+	}
+	prop1 := m.ObjectGroups[0].Objects[0].Properties[0]
+	if prop1.Name != "attrValue" {
+		t.Error("Unable to parse object name")
+	}
+	if prop1.Value != "This is an attribute value" {
+		t.Error("Unable to parse object value")
+	}
+
+	prop2 := m.ObjectGroups[0].Objects[0].Properties[1]
+	if prop2.Name != "multilineValue" {
+		t.Error("Unable to parse object name")
+	}
+	if prop2.Value != `This is
+a multiline value` {
+		t.Error("Unable to parse object value")
+	}
+
+}
